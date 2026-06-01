@@ -8,7 +8,7 @@ export function useLang() {
 }
 
 export function LangProvider({ children }) {
-  const [lang, setLang] = useState('ru')
+  const [lang, setLang] = useState('en')
   const t = lang === 'ru' ? ru : en
   return (
     <LangContext.Provider value={{ lang, setLang, t }}>

@@ -39,6 +39,10 @@ export const ru = {
     section: 'Проекты',
     heading: 'Избранные работы',
     desc: 'Open source проекты, которые я создал — игры, боты, веб-приложения и другое.',
+    featured: 'Избранное',
+    live: 'Сайт',
+    source: 'Исходный код',
+    viewDemo: 'Смотреть демо',
   },
   terminal: {
     section: 'Терминал',
@@ -104,6 +108,10 @@ export const en = {
     section: 'Projects',
     heading: 'Selected work',
     desc: "Open source projects I've built — games, bots, web apps, and more.",
+    featured: 'Featured',
+    live: 'Live',
+    source: 'Source Code',
+    viewDemo: 'View Live Demo',
   },
   terminal: {
     section: 'Terminal',
