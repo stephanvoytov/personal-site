@@ -21,7 +21,7 @@ export const projects = [
     client: 'Personal',
     type: 'web',
     deployed: true,
-    link: 'https://stephanv.pythonanywhere.com',
+    link: 'https://rugram.mooo.com/',
     github: 'https://github.com/stephanvoytov/rugram',
   },
   {
