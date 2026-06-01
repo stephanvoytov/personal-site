@@ -1,16 +1,39 @@
-# React + Vite
+# portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio site built with React, Vite, and Tailwind CSS v4.
 
-Currently, two official plugins are available:
+**Live:** https://stephanvoytov.github.io/personal-site/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- React 19 + Vite 8
+- Tailwind CSS v4
+- Framer Motion
+- react-intersection-observer
+- Custom i18n (EN/RU)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- Dark theme with mint (emerald-green) accents
+- Realistic terminal widget with variable typing speed
+- Language switcher (English / Russian)
+- 8 curated projects from GitHub
+- Responsive layout with glassmorphism
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+npm run preview
+```
+
+## License
+
+MIT
