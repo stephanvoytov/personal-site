@@ -45,6 +45,7 @@ export default function Skills() {
               viewport={{ once: true }}
               transition={{ delay: ci * 0.15, duration: 0.5 }}
               className="glass rounded-xl p-6 relative group"
+              data-cursor="card"
             >
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-accent/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               <h3 className="text-sm font-semibold text-[#c0caf5] mb-4 relative">
@@ -60,7 +61,8 @@ export default function Skills() {
                     whileInView="visible"
                     viewport={{ once: true }}
                     whileHover={{ scale: 1.08, y: -2 }}
-                    className="px-3 py-1.5 text-xs font-mono rounded-lg border border-[#1e2030] text-[#565f89] hover:border-accent/40 hover:text-accent hover:shadow-[0_0_12px_rgba(52,211,153,0.1)] transition-all duration-200 cursor-default"
+                    data-cursor="code"
+                    className="px-3 py-1.5 text-xs font-mono rounded-lg border border-[#1e2030] text-[#565f89] hover:border-accent/40 hover:text-accent hover:shadow-[0_0_12px_rgba(52,211,153,0.1)] transition-all duration-200"
                   >
                     {skill.name}
                   </motion.span>

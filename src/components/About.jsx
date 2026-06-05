@@ -56,7 +56,8 @@ export default function About() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.4 }}
                 whileHover={{ scale: 1.03, y: -3 }}
-                className="glass rounded-xl p-4 text-center group cursor-default"
+                data-cursor="card"
+                className="glass rounded-xl p-4 text-center group"
               >
                 <p className="text-xs text-[#565f89] group-hover:text-accent/80 transition-colors mb-1">{item.label}</p>
                 <p className="text-sm font-medium text-[#c0caf5]">{item.value}</p>

@@ -24,6 +24,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full border border-[#1e2030] bg-[#0a0a0f]/50"
+            data-cursor="card"
           >
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
             <span className="font-mono text-xs text-[#565f89]">
@@ -38,7 +39,7 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-display font-bold leading-tight mb-4 tracking-tight"
           >
-            Stepan{' '}
+            Stephan{' '}
             <span className="gradient-text">Voytov</span>
             <span className="block text-sm md:text-base font-mono text-[#565f89] mt-2 font-normal tracking-wide">
               stephan@portfolio:~$
