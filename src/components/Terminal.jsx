@@ -114,7 +114,7 @@ export default function Terminal() {
   const { out, allDone, showCursorOnNewPrompt } = renderLines()
 
   return (
-    <section className="relative py-24 md:py-32">
+    <section id="terminal" className="relative py-24 md:py-32">
       <div className="container-section">
         <motion.div
           ref={ref}
