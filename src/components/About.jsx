@@ -27,9 +27,18 @@ export default function About() {
           </h2>
 
           <div className="space-y-4 text-sm md:text-base text-[#6b7280] leading-relaxed">
-            <p>{a.p1}</p>
-            <p>{a.p2}</p>
-            <p>{a.p3}</p>
+            {[a.p1, a.p2, a.p3].map((text, i) => (
+              <motion.p
+                key={i}
+                initial={{ opacity: 0, x: -15 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                className="leading-relaxed"
+              >
+                {text}
+              </motion.p>
+            ))}
           </div>
 
           {/* Details grid */}
@@ -46,9 +55,10 @@ export default function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.4 }}
-                className="glass rounded-xl p-4 text-center"
+                whileHover={{ scale: 1.03, y: -3 }}
+                className="glass rounded-xl p-4 text-center group cursor-default"
               >
-                <p className="text-xs text-[#565f89] mb-1">{item.label}</p>
+                <p className="text-xs text-[#565f89] group-hover:text-accent/80 transition-colors mb-1">{item.label}</p>
                 <p className="text-sm font-medium text-[#c0caf5]">{item.value}</p>
               </motion.div>
             ))}

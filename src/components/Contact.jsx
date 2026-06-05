@@ -35,6 +35,22 @@ const contacts = [
   },
 ]
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12 },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1, x: 0,
+    transition: { duration: 0.4, ease: 'easeOut' },
+  },
+}
+
 export default function Contact() {
   const { t } = useLang()
   const c = t.contact
@@ -63,20 +79,28 @@ export default function Contact() {
             {c.desc}
           </p>
 
-          <div className="flex flex-col items-center gap-3">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            className="flex flex-col items-center gap-3"
+          >
             {contacts.map((item) => (
-              <a
+              <motion.a
                 key={item.name}
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="glass rounded-xl px-6 py-3 flex items-center gap-3 text-sm text-[#c0caf5] hover:text-accent hover:border-accent/30 transition-all duration-300 w-full max-w-sm"
+                variants={itemVariants}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="glass rounded-xl px-6 py-3 flex items-center gap-3 text-sm text-[#c0caf5] hover:text-accent hover:border-accent/30 transition-all duration-300 w-full max-w-sm group"
               >
-                <item.icon className="w-5 h-5 text-[#565f89]" />
+                <item.icon className="w-5 h-5 text-[#565f89] group-hover:text-accent transition-colors duration-300" />
                 <span>{item.label}</span>
-              </a>
+              </motion.a>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

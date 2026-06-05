@@ -40,6 +40,9 @@ export default function Hero() {
           >
             Stepan{' '}
             <span className="gradient-text">Voytov</span>
+            <span className="block text-sm md:text-base font-mono text-[#565f89] mt-2 font-normal tracking-wide">
+              stephan@portfolio:~$
+            </span>
           </motion.h1>
 
           {/* Role */}
@@ -71,7 +74,7 @@ export default function Hero() {
           >
             <a
               href="#projects"
-              className="group relative inline-flex items-center gap-2 px-8 py-3.5 bg-accent hover:bg-accent-dark text-[#0a0a0f] font-semibold rounded-xl transition-all duration-300"
+              className="group relative inline-flex items-center gap-2 px-8 py-3.5 bg-accent hover:bg-accent-dark text-[#0a0a0f] font-semibold rounded-xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(52,211,153,0.3)]"
             >
               {h.btnProjects}
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -129,7 +129,8 @@ function ProjectCard({ project, index, inView, p }) {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: 0.1 + index * 0.08, duration: 0.5, ease: 'easeOut' }}
-      className="group glass rounded-xl overflow-hidden hover:border-accent/30 transition-all duration-500"
+      whileHover={{ y: -4 }}
+      className="group glass rounded-xl overflow-hidden hover:border-accent/30 hover:shadow-[0_0_20px_rgba(52,211,153,0.06)] transition-all duration-500"
       data-cursor="card"
     >
       <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${clientColor}, ${clientColor}66)` }} />
