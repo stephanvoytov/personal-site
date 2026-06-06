@@ -40,9 +40,10 @@
 ::-webkit-scrollbar-thumb:hover { background: #3a3a4e; }
 
 html {
-  scroll-snap-type: y mandatory;
-  background: #0a0a0f;
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 70px;
   scroll-behavior: smooth;
+  background: #0a0a0f;
 }
 body { background: #0a0a0f; }
 
