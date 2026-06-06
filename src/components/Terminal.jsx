@@ -29,7 +29,10 @@ const calcTimings = (sessions) => {
     for (const d of charDelays) t += d
     const typingEnd = t
 
-    t += 200 // exec пауза
+    t += 250 // пауза перед Enter — команда напечатана, курсор моргает
+    const enterTime = t
+
+    t += 120 // "нажатие Enter"
     const execEnd = t
 
     // Планируем построчный вывод
@@ -44,7 +47,7 @@ const calcTimings = (sessions) => {
     t += 250 // межсессионная пауза
 
     result.push({
-      promptTime, cmdStart, typingEnd,
+      promptTime, cmdStart, typingEnd, enterTime,
       charDelays, execEnd,
       outSchedule, outEnd,
     })
@@ -156,7 +159,12 @@ export default function Terminal() {
         waitMessage = ''
       } else if (elapsed >= s.typingEnd) {
         cmdShown = ses.cmd
-        if (elapsed < s.execEnd) {
+        if (elapsed < s.enterTime) {
+          // Команда напечатана, ждём Enter — курсор моргает, сообщений нет
+          showCur = true
+          waitMessage = ''
+        } else if (elapsed < s.execEnd) {
+          // Enter нажат — executing
           showCur = true
           waitMessage = '⏳ executing...'
         } else {
