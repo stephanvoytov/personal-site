@@ -4,30 +4,83 @@ import { useInView } from 'react-intersection-observer'
 import { useLang } from '../LanguageContext'
 import { en } from '../i18n'
 
-const promptStr = 'stephan@portfolio:~$ '
 const FS = 13
 
-const charPattern = [48, 38, 58, 42, 52, 32, 62, 45, 38, 55, 42, 60, 36, 52, 46, 42]
+// Паттерны скорости: короткие команды быстрее
+const fastPattern = [60, 40, 30, 22, 18]
+const slowPattern = [75, 58, 45, 38, 32, 28, 26, 22, 20, 18, 16]
 
-const getCharDelays = (length) =>
-  Array.from({ length }, (_, i) => charPattern[i % charPattern.length])
+const getCharDelays = (cmd) => {
+  const base = cmd.length < 10 ? fastPattern : slowPattern
+  return Array.from({ length: cmd.length }, (_, i) => base[i % base.length])
+}
 
+// Планировщик команд
 const calcTimings = (sessions) => {
   const result = []
   let t = 200
+
   for (const session of sessions) {
     const promptTime = t
     t += 350
+
     const cmdStart = t
-    const charDelays = getCharDelays(session.cmd.length)
+    const charDelays = getCharDelays(session.cmd)
     for (const d of charDelays) t += d
-    const totalTypingTime = t - cmdStart
-    t += 180
-    const outTime = t
-    t += 250
-    result.push({ promptTime, cmdStart, totalTypingTime, charDelays, outTime })
+    const typingEnd = t
+
+    t += 200 // exec пауза
+    const execEnd = t
+
+    // Планируем построчный вывод
+    const outLines = session.out.split('\n')
+    const outSchedule = []
+    for (const line of outLines) {
+      outSchedule.push({ time: t, text: line })
+      t += 100 + Math.random() * 80
+    }
+    const outEnd = t
+
+    t += 250 // межсессионная пауза
+
+    result.push({
+      promptTime, cmdStart, typingEnd,
+      charDelays, execEnd,
+      outSchedule, outEnd,
+    })
   }
-  return { sessions: result, total: t + 300 }
+
+  return { sessions: result, total: t + 200 }
+}
+
+// Цветной вывод
+function OutputLine({ text }) {
+  const t = text.trim()
+  if (/^\d+ repos/i.test(t) || /^\d+ репозиториев/i.test(t)) {
+    return <div className="whitespace-pre"><span style={{ color: '#bb9af7' }}>{text}</span></div>
+  }
+  if (t === 'stephan' || t.includes('coding since') || t.includes('всегда строю')) {
+    return <div className="whitespace-pre"><span style={{ color: '#e0af68' }}>{text}</span></div>
+  }
+  if (t.startsWith('TUI') || t.startsWith('GUI') || t.includes('·')) {
+    return <div className="whitespace-pre"><span style={{ color: '#7ec699' }}>{text}</span></div>
+  }
+  // ls -G: цветные имена проектов
+  if (text.startsWith('  ')) {
+    const colors = ['#7ec699', '#61DAFB', '#f7768e', '#e0af68', '#bb9af7', '#9ece6a', '#2dd4bf', '#f59e0b']
+    const parts = text.trim().split(/\s+/)
+    return (
+      <div className="whitespace-pre" style={{ color: '#565f89' }}>
+        {parts.map((p, i) => (
+          <span key={i}>
+            {i > 0 ? '  ' : ''}
+            <span style={{ color: colors[i % colors.length] }}>{p}</span>
+          </span>
+        ))}
+      </div>
+    )
+  }
+  return <div className="whitespace-pre" style={{ color: '#a9b1d6' }}>{text}</div>
 }
 
 export default function Terminal() {
@@ -39,8 +92,7 @@ export default function Terminal() {
   const raf = useRef(null)
   const scrollRef = useRef(null)
 
-  useEffect(() => {
-    if (!inView) return
+  const startAnimation = () => {
     setElapsed(0)
     const delay = setTimeout(() => {
       const start = performance.now()
@@ -52,67 +104,81 @@ export default function Terminal() {
       raf.current = requestAnimationFrame(tick)
     }, 300)
     return () => { clearTimeout(delay); if (raf.current) cancelAnimationFrame(raf.current) }
-  }, [inView, t.terminal.sessions])
+  }
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    if (!inView) return
+    const cleanup = startAnimation()
+    return cleanup
+  }, [inView, timing.total])
+
+  // Плавный скролл
+  useEffect(() => {
+    if (!scrollRef.current) return
+    const el = scrollRef.current
+    const target = el.scrollHeight
+    const current = el.scrollTop
+    const diff = target - current
+    if (diff > 20) {
+      el.scrollTop = current + Math.min(diff * 0.08 + 0.5, 10)
+    } else {
+      el.scrollTop = target
     }
   }, [elapsed])
 
   const renderLines = () => {
     const out = []
-
     for (let i = 0; i < sessions.length; i++) {
       const s = timing.sessions[i]
-      const session = sessions[i]
+      const ses = sessions[i]
       if (elapsed < s.promptTime) break
 
+      // Команда
       let cmdShown = ''
       let isTyping = false
-      let execPause = false
+      let execPhase = false
 
-      if (elapsed >= s.cmdStart) {
+      if (elapsed >= s.cmdStart && elapsed < s.typingEnd) {
         const typingElapsed = elapsed - s.cmdStart
-        if (typingElapsed < s.totalTypingTime) {
-          let charsToShow = 0
-          let acc = 0
-          for (let c = 0; c < session.cmd.length; c++) {
-            acc += s.charDelays[c]
-            if (acc <= typingElapsed) charsToShow = c + 1
-          }
-          cmdShown = session.cmd.slice(0, charsToShow)
-          isTyping = true
-        } else {
-          cmdShown = session.cmd
-          execPause = elapsed < s.outTime
+        let charsToShow = 0
+        let acc = 0
+        for (let c = 0; c < ses.cmd.length; c++) {
+          acc += s.charDelays[c]
+          if (acc <= typingElapsed) charsToShow = c + 1
         }
+        cmdShown = ses.cmd.slice(0, charsToShow)
+        isTyping = true
+      } else if (elapsed >= s.typingEnd) {
+        cmdShown = ses.cmd
+        execPhase = elapsed < s.execEnd
       }
 
-      const showOut = elapsed >= s.outTime
+      // Вывод — строки по расписанию
+      const shownLines = []
+      for (const line of s.outSchedule) {
+        if (elapsed >= line.time) shownLines.push(line.text)
+      }
+      const outComplete = shownLines.length === s.outSchedule.length
 
       out.push({
-        prompt: promptStr,
-        cmd: cmdShown,
-        isTyping,
-        execPause,
-        showOut,
-        out: showOut ? session.out : '',
+        cmd: cmdShown, isTyping, execPhase, shownLines, outComplete,
       })
     }
 
     const allDone = elapsed >= timing.total
     const last = out[out.length - 1]
+    let showCursor = false
+    if (out.length > 0 && last?.outComplete && !allDone) showCursor = true
 
-    let showCursorOnNewPrompt = false
-    if (out.length > 0 && last.showOut && !allDone) {
-      showCursorOnNewPrompt = true
-    }
-
-    return { out, allDone, showCursorOnNewPrompt }
+    return { out, allDone, showCursor }
   }
 
-  const { out, allDone, showCursorOnNewPrompt } = renderLines()
+  const { out, allDone, showCursor } = renderLines()
+
+  const restart = () => {
+    if (raf.current) cancelAnimationFrame(raf.current)
+    startAnimation()
+  }
 
   return (
     <section id="terminal" className="relative py-24 md:py-32">
@@ -136,28 +202,39 @@ export default function Terminal() {
               className="rounded-xl overflow-hidden"
               style={{
                 boxShadow: '0 0 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(122, 162, 247, 0.03)',
-                border: '1px solid #2f3346',
-                background: '#1a1b26',
+                border: '1px solid #2f3346', background: '#1a1b26',
               }}
             >
+              {/* Title bar */}
               <div
-                className="flex items-center gap-2 px-4 py-2.5 select-none"
+                className="flex items-center justify-between px-4 py-2.5 select-none"
                 style={{ background: '#1e2030', borderBottom: '1px solid #2f3346' }}
               >
-                <span className="w-3 h-3 rounded-full" style={{ background: '#f7768e' }} />
-                <span className="w-3 h-3 rounded-full" style={{ background: '#e0af68' }} />
-                <span className="w-3 h-3 rounded-full" style={{ background: '#9ece6a' }} />
-                <span className="ml-4 text-xs font-mono" style={{ color: '#565f89' }}>
-                  stephan@portfolio: ~
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full" style={{ background: '#f7768e' }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: '#e0af68' }} />
+                  <span className="w-3 h-3 rounded-full" style={{ background: '#9ece6a' }} />
+                  <span className="ml-4 text-xs font-mono" style={{ color: '#565f89' }}>
+                    stephan@portfolio: ~
+                  </span>
+                </div>
+                <button
+                  onClick={restart}
+                  className="px-2 py-1 text-[10px] font-mono rounded hover:bg-white/5 transition-colors"
+                  style={{ color: '#565f89' }}
+                  title="Restart"
+                >
+                  ↻
+                </button>
               </div>
 
+              {/* Terminal body */}
               <div
                 ref={scrollRef}
                 className="overflow-y-auto"
                 style={{
                   background: '#1a1b26',
-                  maxHeight: '380px',
+                  maxHeight: '420px',
                   scrollbarWidth: 'thin',
                   scrollbarColor: '#2f3346 transparent',
                 }}
@@ -168,22 +245,31 @@ export default function Terminal() {
                     fontSize: `${FS}px`,
                     lineHeight: 1.45,
                     color: '#c0caf5',
-                    minHeight: '280px',
+                    minHeight: '300px',
                     boxShadow: 'inset 0 0 30px rgba(0,0,0,0.3)',
                   }}
                 >
                   {out.map((line, i) => (
                     <div key={i}>
                       <div className="whitespace-pre-wrap break-all">
-                        <span style={{ color: '#7ec699' }}>{line.prompt}</span>
+                        <span style={{ color: '#7ec699' }}>stephan</span>
+                        <span style={{ color: '#565f89' }}>@portfolio</span>
+                        <span style={{ color: '#7ec699' }}>:~$ </span>
                         <span style={{ color: '#c0caf5' }}>{line.cmd}</span>
-                        {(line.isTyping || line.execPause) && <span className="cursor-block" />}
+                        {(line.isTyping || line.execPhase) && <span className="cursor-block" />}
                       </div>
-                      {line.showOut && (
-                        <div className="whitespace-pre-wrap" style={{ color: '#a9b1d6' }}>
-                          {line.out.split('\n').map((l, j) => (
-                            <div key={j}>{l}</div>
+
+                      {line.shownLines.length > 0 && (
+                        <div>
+                          {line.shownLines.map((text, j) => (
+                            <OutputLine key={j} text={text} />
                           ))}
+                        </div>
+                      )}
+
+                      {line.execPhase && (
+                        <div className="text-[10px] mt-0.5" style={{ color: '#565f89' }}>
+                          ⏳ executing...
                         </div>
                       )}
                     </div>
@@ -191,25 +277,33 @@ export default function Terminal() {
 
                   {out.length === 0 && <span className="cursor-block" />}
 
-                  {showCursorOnNewPrompt && (
+                  {showCursor && (
                     <div className="whitespace-pre-wrap break-all">
-                      <span style={{ color: '#7ec699' }}>{promptStr}</span>
+                      <span style={{ color: '#7ec699' }}>stephan</span>
+                      <span style={{ color: '#565f89' }}>@portfolio</span>
+                      <span style={{ color: '#7ec699' }}>:~$ </span>
                       <span className="cursor-block" />
                     </div>
                   )}
 
                   {allDone && (
-                    <div className="whitespace-pre-wrap break-all">
-                      <span style={{ color: '#7ec699' }}>{promptStr}</span>
-                      <span className="cursor-block" />
-                    </div>
+                    <>
+                      <div className="whitespace-pre-wrap break-all">
+                        <span style={{ color: '#7ec699' }}>stephan</span>
+                        <span style={{ color: '#565f89' }}>@portfolio</span>
+                        <span style={{ color: '#7ec699' }}>:~$ </span>
+                        <span className="cursor-block" />
+                      </div>
+                      <div className="mt-3 text-[10px] text-center" style={{ color: '#2f3346' }}>
+                        [Session completed · click ↻ to restart]
+                      </div>
+                    </>
                   )}
 
                   <style>{`
                     .cursor-block {
                       display: inline-block;
-                      width: 7px;
-                      height: 15px;
+                      width: 7px; height: 15px;
                       background: #7ec699;
                       vertical-align: text-bottom;
                       margin-left: 1px;
