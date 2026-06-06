@@ -72,6 +72,19 @@ function FeaturedCard({ project, p }) {
           <span className="px-3 py-1 text-[11px] font-semibold rounded-full bg-accent/20 text-accent-light border border-accent/30 uppercase tracking-wider">
             ★ {p.featured}
           </span>
+          {project.modes?.map((mode) => (
+            <span
+              key={mode}
+              className="px-2.5 py-1 text-[10px] font-mono font-bold rounded-md uppercase tracking-wider"
+              style={{
+                background: mode === 'GUI' ? 'rgba(97,218,251,0.12)' : 'rgba(126,198,153,0.12)',
+                color: mode === 'GUI' ? '#61DAFB' : '#7ec699',
+                border: `1px solid ${mode === 'GUI' ? 'rgba(97,218,251,0.25)' : 'rgba(126,198,153,0.25)'}`,
+              }}
+            >
+              {mode}
+            </span>
+          ))}
           {project.deployed && (
             <span className="flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-full bg-emerald-500/15 text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />

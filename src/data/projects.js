@@ -15,11 +15,12 @@ export const projects = [
   {
     id: 2,
     title: 'Rugram',
-    description: 'Terminal-based social network — use your keyboard to post, chat, like, and explore. 50+ commands, encrypted messenger, push notifications, and bilingual UI.',
+    description: 'Full-stack social network with dual interface: TUI terminal client and GUI web app. Post, chat, like, explore — 50+ commands, encrypted messenger, push notifications, bilingual UI.',
     tags: ['Python', 'Flask', 'JavaScript', 'Docker'],
     year: 2025,
     client: 'Personal',
     type: 'web',
+    modes: ['TUI', 'GUI'],
     deployed: true,
     featured: true,
     link: 'https://rugram.mooo.com/',
