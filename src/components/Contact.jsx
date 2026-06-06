@@ -100,6 +100,21 @@ export default function Contact() {
               </motion.a>
             ))}
           </motion.div>
+
+          {/* Footer */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="mt-20 pt-8 border-t border-[#1e2030]"
+          >
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#565f89]">
+              <p>&copy; {new Date().getFullYear()} Stephan Voytov. {t.footer}</p>
+              <a href="https://github.com/stephanvoytov" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                GitHub
+              </a>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

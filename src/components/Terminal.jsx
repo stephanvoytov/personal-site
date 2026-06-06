@@ -217,7 +217,7 @@ export default function Terminal() {
             <span className="gradient-text">{t.terminal.headingAccent}</span>
           </h2>
 
-          <div className="mx-auto max-w-3xl select-text">
+          <div className="mx-auto max-w-5xl select-text">
             <div
               className="rounded-xl overflow-hidden"
               style={{

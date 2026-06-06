@@ -20,7 +20,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-[#1e2030]'
-          : 'bg-transparent'
+          : 'bg-[#0a0a0f]/60 border-b border-transparent'
       }`}
     >
       <div className="container-section flex items-center justify-between h-16">

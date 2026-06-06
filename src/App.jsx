@@ -5,7 +5,6 @@ import Terminal from './components/Terminal'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
 import Contact from './components/Contact'
-import Footer from './components/Footer'
 import CustomCursor from './components/Cursor'
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
         <Projects />
         <Contact />
       </main>
-      <Footer />
     </div>
   )
 }

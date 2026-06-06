@@ -47,7 +47,7 @@ html {
 body { background: #0a0a0f; }
 
 /* Каждая секция — полноэкранный блок */
-section[id], footer[id] {
+section[id] {
   scroll-snap-align: start;
   min-height: 100vh;
   min-height: 100dvh;
