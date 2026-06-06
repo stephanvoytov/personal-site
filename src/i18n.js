@@ -38,9 +38,9 @@ export const ru = {
       { cmd: 'whoami', out: 'stephan' },
       { cmd: 'cat ~/skills.txt', out: 'Python  ·  Django  ·  FastAPI  ·  Docker  ·  SQL  ·  JS/TS' },
       { cmd: 'ls -G projects/', out: 'rugram           brewery-tycoon\nsub-proxy        psychology-site\nfin-tracker      wish-reserve-bot\nmath-training    nutrition-site' },
-      { cmd: 'ls -l --mode rugram/', out: 'TUI  ·  GUI  (веб + терминал)' },
-      { cmd: 'wc -l ~/repos.txt', out: '8 репозиториев' },
-      { cmd: 'uptime', out: 'coding since 2023 · всегда строю' },
+      { cmd: 'ls -l --mode rugram/', out: 'TUI  ·  GUI  (web + terminal)' },
+      { cmd: 'wc -l ~/repos.txt', out: '8 repos' },
+      { cmd: 'uptime', out: 'coding since 2023 · always building' },
     ],
   },
   contact: {

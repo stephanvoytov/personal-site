@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { useLang } from '../LanguageContext'
+import { en } from '../i18n'
 
 const promptStr = 'stephan@portfolio:~$ '
 const FS = 13
@@ -30,8 +31,8 @@ const calcTimings = (sessions) => {
 }
 
 export default function Terminal() {
-  const { t } = useLang()
-  const sessions = t.terminal.sessions
+  const { lang, t } = useLang()
+  const sessions = lang === 'en' ? t.terminal.sessions : en.terminal.sessions
   const timing = calcTimings(sessions)
   const [elapsed, setElapsed] = useState(0)
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 })
