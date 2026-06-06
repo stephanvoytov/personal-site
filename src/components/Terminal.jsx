@@ -135,10 +135,15 @@ export default function Terminal() {
 
       // Команда
       let cmdShown = ''
-      let isTyping = false
-      let execPhase = false
+      let showCur = false // cursor visible?
+      let waitMessage = '' // waiting/executing message
 
-      if (elapsed >= s.cmdStart && elapsed < s.typingEnd) {
+      if (elapsed < s.cmdStart) {
+        // Prompt показан, ждём ввод — курсор моргает
+        showCur = true
+        waitMessage = ''
+      } else if (elapsed >= s.cmdStart && elapsed < s.typingEnd) {
+        // Печатает команду
         const typingElapsed = elapsed - s.cmdStart
         let charsToShow = 0
         let acc = 0
@@ -147,10 +152,17 @@ export default function Terminal() {
           if (acc <= typingElapsed) charsToShow = c + 1
         }
         cmdShown = ses.cmd.slice(0, charsToShow)
-        isTyping = true
+        showCur = true
+        waitMessage = ''
       } else if (elapsed >= s.typingEnd) {
         cmdShown = ses.cmd
-        execPhase = elapsed < s.execEnd
+        if (elapsed < s.execEnd) {
+          showCur = true
+          waitMessage = '⏳ executing...'
+        } else {
+          showCur = false
+          waitMessage = ''
+        }
       }
 
       // Вывод — строки по расписанию
@@ -161,7 +173,7 @@ export default function Terminal() {
       const outComplete = shownLines.length === s.outSchedule.length
 
       out.push({
-        cmd: cmdShown, isTyping, execPhase, shownLines, outComplete,
+        cmd: cmdShown, showCur, waitMessage, shownLines, outComplete,
       })
     }
 
@@ -256,7 +268,7 @@ export default function Terminal() {
                         <span style={{ color: '#565f89' }}>@portfolio</span>
                         <span style={{ color: '#7ec699' }}>:~$ </span>
                         <span style={{ color: '#c0caf5' }}>{line.cmd}</span>
-                        {(line.isTyping || line.execPhase) && <span className="cursor-block" />}
+                        {line.showCur && <span className="cursor-block" />}
                       </div>
 
                       {line.shownLines.length > 0 && (
@@ -267,9 +279,9 @@ export default function Terminal() {
                         </div>
                       )}
 
-                      {line.execPhase && (
+                      {line.waitMessage && (
                         <div className="text-[10px] mt-0.5" style={{ color: '#565f89' }}>
-                          ⏳ executing...
+                          {line.waitMessage}
                         </div>
                       )}
                     </div>
