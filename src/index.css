@@ -41,8 +41,9 @@
 
 html {
   scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
+  background: #0a0a0f;
 }
+body { background: #0a0a0f; }
 section[id] { scroll-snap-align: start; }
 
 /* ─── Animations ─── */
