@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { useLang } from '../LanguageContext'
@@ -35,9 +35,9 @@ const calcTimings = (sessions) => {
     // Планируем построчный вывод
     const outLines = session.out.split('\n')
     const outSchedule = []
-    for (const line of outLines) {
-      outSchedule.push({ time: t, text: line })
-      t += 100 + Math.random() * 80
+    for (let li = 0; li < outLines.length; li++) {
+      outSchedule.push({ time: t, text: outLines[li] })
+      t += 100 + li * 12 // детерминированная задержка
     }
     const outEnd = t
 
@@ -86,7 +86,7 @@ function OutputLine({ text }) {
 export default function Terminal() {
   const { lang, t } = useLang()
   const sessions = lang === 'en' ? t.terminal.sessions : en.terminal.sessions
-  const timing = calcTimings(sessions)
+  const timing = useMemo(() => calcTimings(sessions), [sessions])
   const [elapsed, setElapsed] = useState(0)
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 })
   const raf = useRef(null)
