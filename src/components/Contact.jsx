@@ -57,10 +57,9 @@ export default function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 })
 
   return (
-    <section id="contact" className="relative py-24 md:py-32">
+    <section id="contact" className="section-dark relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
-
-      <div className="container-section">
+      <div className="container-section py-24 md:py-32">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 60 }}

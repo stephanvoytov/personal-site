@@ -6,8 +6,9 @@ export default function About() {
   const a = t.about
 
   return (
-    <section id="about" className="py-24 md:py-32">
-      <div className="container-section">
+    <section id="about" className="section-dim relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-950/[0.03] to-transparent pointer-events-none" />
+      <div className="container-section py-24 md:py-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -208,9 +208,9 @@ export default function Projects() {
   const rest = projects.filter((pr) => !pr.featured)
 
   return (
-    <section id="projects" className="relative py-24 md:py-32">
+    <section id="projects" className="section-dim relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-950/5 to-transparent" />
-      <div className="container-section relative z-10">
+      <div className="container-section py-24 md:py-32 relative z-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 60 }}

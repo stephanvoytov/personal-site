@@ -40,11 +40,36 @@
 ::-webkit-scrollbar-thumb:hover { background: #3a3a4e; }
 
 html {
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory;
   background: #0a0a0f;
+  scroll-behavior: smooth;
 }
 body { background: #0a0a0f; }
-section[id] { scroll-snap-align: start; }
+
+/* Каждая секция — полноэкранный блок */
+section[id], footer[id] {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Чередование фонов блоков */
+.section-dark {
+  background: #0a0a0f;
+}
+.section-dim {
+  background: #0d0d14;
+}
+.section-mid {
+  background: #0f0f18;
+}
+
+/* Внутренний контент блока */
+.section-inner {
+  width: 100%;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
 
 /* ─── Animations ─── */
 @keyframes float {

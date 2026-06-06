@@ -201,8 +201,8 @@ export default function Terminal() {
   }
 
   return (
-    <section id="terminal" className="relative py-24 md:py-32">
-      <div className="container-section">
+    <section id="terminal" className="section-dark relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="container-section py-24 md:py-32">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 40 }}

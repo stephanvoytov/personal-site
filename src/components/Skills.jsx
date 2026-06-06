@@ -16,9 +16,9 @@ export default function Skills() {
   const catLabels = [s.catFrontend, s.catBackend, s.catDevOps]
 
   return (
-    <section id="skills" className="py-24 md:py-32 relative overflow-hidden">
+    <section id="skills" className="section-mid relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-950/5 to-transparent pointer-events-none" />
-      <div className="container-section relative">
+      <div className="container-section py-24 md:py-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

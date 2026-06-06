@@ -6,7 +6,7 @@ export default function Hero() {
   const h = t.hero
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="section-dark relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-60" />
       <div className="absolute top-[-15%] left-[-5%] w-[50%] h-[50%] rounded-full bg-emerald-600/15 blur-[120px]" />
